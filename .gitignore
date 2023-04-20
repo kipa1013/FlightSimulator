@@ -73,3 +73,6 @@ crashlytics-build.properties
 
 #3d-modeling in blender
 /[Mm]odels
+
+#JetBrains
+.idea/
