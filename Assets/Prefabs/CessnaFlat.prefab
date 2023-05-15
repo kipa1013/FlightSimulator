@@ -654,6 +654,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a97c0de069614e14bbfbc376b9606b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rightHand: {fileID: 0}
+  rightSnap: {fileID: 32254875967390935}
+  leftHand: {fileID: 0}
+  leftSnap: {fileID: 7917256152719973123}
+  directionalObject: {fileID: 5798980333733932286}
 --- !u!1 &4705678332779012607
 GameObject:
   m_ObjectHideFlags: 0
