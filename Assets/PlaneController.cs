@@ -16,9 +16,9 @@ public class PlaneController : MonoBehaviour
     private float _beginningAngularDrag;
     private float throttle;
     private float lastThrust = 0f;
-    private float roll;
-    private float pitch;
-    private float yaw;
+    private float roll = 0f;
+    private float pitch = 0f;
+    private float yaw = 0f;
 
     private float responseModifer
     {
@@ -55,8 +55,8 @@ public class PlaneController : MonoBehaviour
 
     private void HandleInputs()
     {
-        roll = Input.GetAxis("Roll");
-        pitch = Input.GetAxis("Pitch");
+        roll = Input.GetAxis("Horizontal");
+        pitch = Input.GetAxis("Vertical");
         yaw = Input.GetAxis("Yaw");
 
         if (Input.GetKey(KeyCode.Space)) throttle += throttleIncremnet;
@@ -77,8 +77,15 @@ public class PlaneController : MonoBehaviour
     void Update()
     {
         HandleInputs();
-        UpdateHUD();
+        //UpdateHUD();
         SendPlaneStatsToCockpitController();
+
+        Debug.ClearDeveloperConsole();
+        Debug.Log("Throttle: " + throttle);
+        Debug.Log("Roll: " + roll);
+        Debug.Log("Pitch: " + pitch);
+        Debug.Log("Yaw: " + yaw);
+        Debug.Log("Airspeed: " + (rb.velocity.magnitude * 1.94384f).ToString("F0") + " knots");
     }
 
     private void UpdateThrust()
