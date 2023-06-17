@@ -1293,6 +1293,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CessnaFlat
       objectReference: {fileID: 0}
+    - target: {fileID: 2845011008377345431, guid: 48371304d344c8a449fb66a2cea9c4ff, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3368357460032070673, guid: 48371304d344c8a449fb66a2cea9c4ff, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -1340,6 +1344,10 @@ PrefabInstance:
     - target: {fileID: 4044272442832302155, guid: 48371304d344c8a449fb66a2cea9c4ff, type: 3}
       propertyPath: m_Name
       value: YokeObj
+      objectReference: {fileID: 0}
+    - target: {fileID: 5610452041150238085, guid: 48371304d344c8a449fb66a2cea9c4ff, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 5798980333733932286, guid: 48371304d344c8a449fb66a2cea9c4ff, type: 3}
       propertyPath: m_RootOrder
