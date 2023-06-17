@@ -8,6 +8,7 @@ public class CockpitController : MonoBehaviour
     public GameObject bgOuterRing;
     public GameObject plane;
     public float pitch;
+    public float roll;
 
     // Start is called before the first frame update
     void Start()
@@ -18,7 +19,8 @@ public class CockpitController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        bgOuterRing.transform.localRotation = Quaternion.Euler(0f, plane.transform.rotation.eulerAngles.z + 180, 0f);
+        roll = plane.transform.rotation.eulerAngles.z;
+        bgOuterRing.transform.localRotation = Quaternion.Euler(0f, roll + 180, 0f);
 
         //Mesh mesh = bg.GetComponent<MeshFilter>().mesh;
         //Vector2[] uv = mesh.uv;
