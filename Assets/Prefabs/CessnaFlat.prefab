@@ -251,6 +251,7 @@ MonoBehaviour:
   bg: {fileID: 3189432976350344546}
   bgOuterRing: {fileID: 8915400323193000931}
   plane: {fileID: 2735127463864565419}
+  pitch: 0
 --- !u!1 &3161870258353417540
 GameObject:
   m_ObjectHideFlags: 0
