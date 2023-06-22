@@ -44,6 +44,24 @@ public partial class @PlaneInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Flaps"",
+                    ""type"": ""Button"",
+                    ""id"": ""3767372c-2f91-47fa-8fdd-cbdba0415398"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Break"",
+                    ""type"": ""Button"",
+                    ""id"": ""6574ef43-c81e-4699-a264-d3662f4b610d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -156,6 +174,28 @@ public partial class @PlaneInput : IInputActionCollection2, IDisposable
                     ""action"": ""Thrust"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ab9eaa2a-465a-4969-9410-016a64cf6924"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Flaps"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f4f87dd5-8f0a-4999-9b54-a3681d18707f"",
+                    ""path"": ""<Keyboard>/b"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Break"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -166,6 +206,8 @@ public partial class @PlaneInput : IInputActionCollection2, IDisposable
         m_Plane = asset.FindActionMap("Plane", throwIfNotFound: true);
         m_Plane_Steering = m_Plane.FindAction("Steering", throwIfNotFound: true);
         m_Plane_Thrust = m_Plane.FindAction("Thrust", throwIfNotFound: true);
+        m_Plane_Flaps = m_Plane.FindAction("Flaps", throwIfNotFound: true);
+        m_Plane_Break = m_Plane.FindAction("Break", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -227,12 +269,16 @@ public partial class @PlaneInput : IInputActionCollection2, IDisposable
     private IPlaneActions m_PlaneActionsCallbackInterface;
     private readonly InputAction m_Plane_Steering;
     private readonly InputAction m_Plane_Thrust;
+    private readonly InputAction m_Plane_Flaps;
+    private readonly InputAction m_Plane_Break;
     public struct PlaneActions
     {
         private @PlaneInput m_Wrapper;
         public PlaneActions(@PlaneInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Steering => m_Wrapper.m_Plane_Steering;
         public InputAction @Thrust => m_Wrapper.m_Plane_Thrust;
+        public InputAction @Flaps => m_Wrapper.m_Plane_Flaps;
+        public InputAction @Break => m_Wrapper.m_Plane_Break;
         public InputActionMap Get() { return m_Wrapper.m_Plane; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -248,6 +294,12 @@ public partial class @PlaneInput : IInputActionCollection2, IDisposable
                 @Thrust.started -= m_Wrapper.m_PlaneActionsCallbackInterface.OnThrust;
                 @Thrust.performed -= m_Wrapper.m_PlaneActionsCallbackInterface.OnThrust;
                 @Thrust.canceled -= m_Wrapper.m_PlaneActionsCallbackInterface.OnThrust;
+                @Flaps.started -= m_Wrapper.m_PlaneActionsCallbackInterface.OnFlaps;
+                @Flaps.performed -= m_Wrapper.m_PlaneActionsCallbackInterface.OnFlaps;
+                @Flaps.canceled -= m_Wrapper.m_PlaneActionsCallbackInterface.OnFlaps;
+                @Break.started -= m_Wrapper.m_PlaneActionsCallbackInterface.OnBreak;
+                @Break.performed -= m_Wrapper.m_PlaneActionsCallbackInterface.OnBreak;
+                @Break.canceled -= m_Wrapper.m_PlaneActionsCallbackInterface.OnBreak;
             }
             m_Wrapper.m_PlaneActionsCallbackInterface = instance;
             if (instance != null)
@@ -258,6 +310,12 @@ public partial class @PlaneInput : IInputActionCollection2, IDisposable
                 @Thrust.started += instance.OnThrust;
                 @Thrust.performed += instance.OnThrust;
                 @Thrust.canceled += instance.OnThrust;
+                @Flaps.started += instance.OnFlaps;
+                @Flaps.performed += instance.OnFlaps;
+                @Flaps.canceled += instance.OnFlaps;
+                @Break.started += instance.OnBreak;
+                @Break.performed += instance.OnBreak;
+                @Break.canceled += instance.OnBreak;
             }
         }
     }
@@ -266,5 +324,7 @@ public partial class @PlaneInput : IInputActionCollection2, IDisposable
     {
         void OnSteering(InputAction.CallbackContext context);
         void OnThrust(InputAction.CallbackContext context);
+        void OnFlaps(InputAction.CallbackContext context);
+        void OnBreak(InputAction.CallbackContext context);
     }
 }

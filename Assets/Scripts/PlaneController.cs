@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem;
 
+
 public class PlaneController : MonoBehaviour
 {
     [Header("Plane Stats")]
@@ -12,12 +13,14 @@ public class PlaneController : MonoBehaviour
     public AnimationCurve PowerCurve;
     public float responsivness = 10f;
 
-    public float throttle;
-    public float roll;
-    public float pitch;
-    public float yaw;
+    private float throttle;
+    private float roll;
+    private float pitch;
+    private float yaw;
     private readonly float wingSpan = 11f; //36f;
     private readonly float wingArea = 16.17f; //174f;
+    private Vector3 airDynamicForces;
+    private Vector3 velocitySmooth = Vector3.zero;
 
     private float aspectRatio
     {
@@ -94,7 +97,7 @@ public class PlaneController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //HandleInputs();
+        HandleInputs();
         UpdateHUD();
     }
 
@@ -109,8 +112,8 @@ public class PlaneController : MonoBehaviour
         rb.AddRelativeTorque(torque);
     }
 
-    // https://stackoverflow.com/questions/49716989/unity-aircraft-physics
-    // uses approx. of lifting line theory
+    //https://stackoverflow.com/questions/49716989/unity-aircraft-physics
+    //uses approx.of lifting line theory
     private void calculateForces()
     {
         // α * 2 * PI * (AR / AR + 2)
@@ -122,16 +125,19 @@ public class PlaneController : MonoBehaviour
         // V ^ 2 * R * 0.5 * A
         var pressure = rb.velocity.sqrMagnitude * 1.2754f * 0.5f * wingArea;
 
-        var lift = inducedLift * pressure;
+        var lift = Mathf.Clamp(inducedLift * pressure, 0 , 10000);
 
-        var drag = (0.021f + inducedDrag) * pressure;
+        var drag = Mathf.Clamp((0.021f + inducedDrag) * pressure, 0, float.MaxValue);
 
         // *flip sign(s) if necessary*
         var dragDirection = rb.velocity.normalized;
         var liftDirection = Vector3.Cross(dragDirection, transform.right);
 
-        // Lift + Drag = Total Force
-        rb.AddForce(lift * liftDirection -  dragDirection * drag);
+
+        var liftForce =  lift * liftDirection;
+        var dragForce = dragDirection * drag;
+
+        rb.AddForce(liftForce - dragForce);
         var thrust = maxThrust * PowerCurve.Evaluate((throttle / 100));
         rb.AddForce(transform.forward * thrust);
     }
