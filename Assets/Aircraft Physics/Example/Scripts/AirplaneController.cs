@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class AirplaneController : MonoBehaviour
@@ -26,8 +27,8 @@ public class AirplaneController : MonoBehaviour
     [SerializeField]
     Text displayText = null;
 
-    float thrustPercent;
-    float brakesTorque;
+    [FormerlySerializedAs("thrustPercent")] public float ThrustPercent;
+    [FormerlySerializedAs("brakesTorque")] public float BrakesTorque;
 
     private PlaneInput planeInput;
     AircraftPhysics aircraftPhysics;
@@ -44,7 +45,6 @@ public class AirplaneController : MonoBehaviour
         planeInput = new PlaneInput();
         planeInput.Plane.Enable();
     }
-
     private void Update()
     {
         var steeringInput = planeInput.Plane.Steering.ReadValue<Vector3>();
@@ -54,9 +54,9 @@ public class AirplaneController : MonoBehaviour
 
         var thrustInput = planeInput.Plane.Thrust.ReadValue<float>();
 
-        if (thrustInput > 0) thrustPercent += 0.1f;
-        else if (thrustInput < 0) thrustPercent -= 0.1f;
-        thrustPercent = Mathf.Clamp01(thrustPercent);
+        if (thrustInput > 0) ThrustPercent += 0.1f;
+        else if (thrustInput < 0) ThrustPercent -= 0.1f;
+        ThrustPercent = Mathf.Clamp01(ThrustPercent);
 
         if (planeInput.Plane.Flaps.triggered)
         {
@@ -65,23 +65,23 @@ public class AirplaneController : MonoBehaviour
 
         if (planeInput.Plane.Break.triggered)
         {
-            brakesTorque = brakesTorque > 0 ? 0 : 100f;
+            BrakesTorque = BrakesTorque > 0 ? 0 : 100f;
         }
 
         displayText.text = "V: " + ((int)rb.velocity.magnitude).ToString("D3") + " m/s\n";
         displayText.text += "A: " + ((int)transform.position.y).ToString("D4") + " m\n";
-        displayText.text += "T: " + (int)(thrustPercent * 100) + "%\n";
-        displayText.text += brakesTorque > 0 ? "B: ON\n" : "B: OFF\n";
+        displayText.text += "T: " + (int)(ThrustPercent * 100) + "%\n";
+        displayText.text += BrakesTorque > 0 ? "B: ON\n" : "B: OFF\n";
         displayText.text += Flap > 0 ? "F: ON" : "F: OFF";
     }
 
     private void FixedUpdate()
     {
         SetControlSurfecesAngles(Pitch, Roll, Yaw, Flap);
-        aircraftPhysics.SetThrustPercent(thrustPercent);
+        aircraftPhysics.SetThrustPercent(ThrustPercent);
         foreach (var wheel in wheels)
         {
-            wheel.brakeTorque = brakesTorque;
+            wheel.brakeTorque = BrakesTorque;
             // small torque to wake up wheel collider
             wheel.motorTorque = 0.01f;
         }
