@@ -24,13 +24,12 @@ public class AirplaneController : MonoBehaviour
     public float Roll;
     [Range(0, 1)]
     public float Flap;
-    [SerializeField]
-    Text displayText = null;
 
     [FormerlySerializedAs("thrustPercent")] public float ThrustPercent;
     [FormerlySerializedAs("brakesTorque")] public float BrakesTorque;
 
     private PlaneInput planeInput;
+    private AudioSource engineSound;
     AircraftPhysics aircraftPhysics;
     Rigidbody rb;
 
@@ -38,41 +37,39 @@ public class AirplaneController : MonoBehaviour
     {
         aircraftPhysics = GetComponent<AircraftPhysics>();
         rb = GetComponent<Rigidbody>();
+
     }
 
     private void Awake()
     {
         planeInput = new PlaneInput();
         planeInput.Plane.Enable();
+        engineSound = GetComponent<AudioSource>();
     }
     private void Update()
     {
-        var steeringInput = planeInput.Plane.Steering.ReadValue<Vector3>();
+        //var steeringInput = planeInput.Plane.Steering.ReadValue<Vector3>();
         //Roll = steeringInput.x;
-        Pitch = steeringInput.y;
-        Yaw = steeringInput.z;
+        //Pitch = steeringInput.y;
+        //Yaw = steeringInput.z;
 
-        var thrustInput = planeInput.Plane.Thrust.ReadValue<float>();
+        //var thrustInput = planeInput.Plane.Thrust.ReadValue<float>();
 
-        if (thrustInput > 0) ThrustPercent += 0.1f;
-        else if (thrustInput < 0) ThrustPercent -= 0.1f;
-        ThrustPercent = Mathf.Clamp01(ThrustPercent);
+        //if (thrustInput > 0) ThrustPercent += 0.1f;
+        //else if (thrustInput < 0) ThrustPercent -= 0.1f;
+        //ThrustPercent = Mathf.Clamp01(ThrustPercent);
 
-        if (planeInput.Plane.Flaps.triggered)
-        {
-            Flap = Flap > 0 ? 0 : 0.3f;
-        }
+        //if (planeInput.Plane.Flaps.triggered)
+        //{
+        //    Flap = Flap > 0 ? 0 : 0.3f;
+        //}
 
-        if (planeInput.Plane.Break.triggered)
-        {
-            BrakesTorque = BrakesTorque > 0 ? 0 : 100f;
-        }
-
-        displayText.text = "V: " + ((int)rb.velocity.magnitude).ToString("D3") + " m/s\n";
-        displayText.text += "A: " + ((int)transform.position.y).ToString("D4") + " m\n";
-        displayText.text += "T: " + (int)(ThrustPercent * 100) + "%\n";
-        displayText.text += BrakesTorque > 0 ? "B: ON\n" : "B: OFF\n";
-        displayText.text += Flap > 0 ? "F: ON" : "F: OFF";
+        //if (planeInput.Plane.Break.triggered)
+        //{
+        //    BrakesTorque = BrakesTorque > 0 ? 0 : 100f;
+        //}
+        engineSound.volume = ThrustPercent;
+        //engineSound.pitch = Mathf.Clamp01(rb.velocity.magnitude / 100) / 3;
     }
 
     private void FixedUpdate()
@@ -114,5 +111,10 @@ public class AirplaneController : MonoBehaviour
     {
         if (!Application.isPlaying)
             SetControlSurfecesAngles(Pitch, Roll, Yaw, Flap);
+    }
+
+    public void ToggleFlap()
+    {
+        Flap = Flap > 0 ? 0 : 0.3f;
     }
 }

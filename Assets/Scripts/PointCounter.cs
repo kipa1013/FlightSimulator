@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
 public class PointCounter : MonoBehaviour
 {
+    [SerializeField] private TextMeshProUGUI pointCanvas;
     private int points;
 
     public int Points
@@ -32,6 +34,7 @@ public class PointCounter : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Pomts+1");
         GameObject targetObject = other.gameObject;
         Target target = targetObject.GetComponent<Target>();
         if (target == null)
@@ -40,7 +43,8 @@ public class PointCounter : MonoBehaviour
         }
 
         points += target.PointsAdded;
-        targetObject.SetActive(false); 
+        targetObject.SetActive(false);
+        pointCanvas.text = "Points:" + points;
         Debug.Log("Points: " + points);
     }
 

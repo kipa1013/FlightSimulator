@@ -4,7 +4,13 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: eaedb3b92c44d9e47937cfd863da6e22
+  - enabled: 1
+    path: Assets/Scenes/CessnaScene.unity
+    guid: c8713d2d9b2c5d043b63afcb6dcdcd06
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: d0521420fdef3054d877d6edc8ff419a, type: 2}
     UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 5d11e2e2b7dd2994fb3efd2dfc2a9186, type: 2}
